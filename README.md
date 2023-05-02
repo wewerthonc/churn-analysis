@@ -46,6 +46,6 @@ churn_df = pd.read_csv(PATH_BASE + "data-test-analytics.csv", usecols = cols, pa
 ```
 
 <center>
-  <img src="imagens/churn_df_info.png">
+  <img src="images/churn_df_info.png">
 </center>
 
