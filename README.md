@@ -45,4 +45,7 @@ date_cols = ['created_at', 'updated_at', 'deleted_at', 'birth_date', 'last_date_
 churn_df = pd.read_csv(PATH_BASE + "data-test-analytics.csv", usecols = cols, parse_dates = date_cols)
 ```
 
-![Descrição do Dataset](images/churn_df_info.png)
+<center>
+  <img src="imagens/churn_df_info.png">
+</center>
+
