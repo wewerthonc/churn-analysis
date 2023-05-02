@@ -1,6 +1,5 @@
 # Churn Analysis
 Repositório: https://github.com/wewerthonc/churn-analysis
-
 Original: https://colab.research.google.com/drive/1HMHLvDkqChgJUFPj-5Iw7-vpHcfca8ud.
 - Google colab notebook: **Churn.ipynb**
 - Dataset: data\data-test-analytics.csv
@@ -34,9 +33,14 @@ Como dito previamente, o dataset contém informações de assinaturas de cliente
 - recency: Tempo desde a última compra do cliente
 - marketing_source: Canal de marketing que converteu a assinatura
 
+<p align="justify">
 Serão usadas todas as colunas para a análise, com exceção das colunas name_hash, email_hash e address_hash, visto que não são importantes para análise.
+</p>
 
+<p align="justify">
 Logo no início, é necessário definir as colunas que contêm dados do tipo data, pois pode ajudar a evitar erros e aumentar a precisão das análises.
+</p>
+
 ```python
 # Define the column names to convert to date
 date_cols = ['created_at', 'updated_at', 'deleted_at', 'birth_date', 'last_date_purchase']
@@ -44,6 +48,9 @@ date_cols = ['created_at', 'updated_at', 'deleted_at', 'birth_date', 'last_date_
 # Read the CSV file and convert specified columns to datetime
 churn_df = pd.read_csv(PATH_BASE + "data-test-analytics.csv", usecols = cols, parse_dates = date_cols)
 ```
+<p align="justify">
+Dessa forma, assim ficará o dataset. Note que há valores 'null' para a coluna 'deleted_at'. Obviamente, clientes ativos não contém uma data de cancelamento da assinatura.
+</p>
 
 <p align="center">
   <img src= "images/churn_df_info.png" />
