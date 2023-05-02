@@ -1,5 +1,6 @@
 # Churn Analysis
 Repositório: https://github.com/wewerthonc/churn-analysis
+
 Original: https://colab.research.google.com/drive/1HMHLvDkqChgJUFPj-5Iw7-vpHcfca8ud.
 - Google colab notebook: **Churn.ipynb**
 - Dataset: data\data-test-analytics.csv
@@ -44,4 +45,4 @@ date_cols = ['created_at', 'updated_at', 'deleted_at', 'birth_date', 'last_date_
 churn_df = pd.read_csv(PATH_BASE + "data-test-analytics.csv", usecols = cols, parse_dates = date_cols)
 ```
 
-![Descrição do Dataset](images/churn_df_image.png)
+![Descrição do Dataset](images/churn_df_info.png)
