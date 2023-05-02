@@ -71,6 +71,7 @@ Um dos primeiros passos na limpeza de dados, é a contagem de valores nulos por 
 <p align="justify">
 Nas análises a serem realizadas, é importante que tenhamos valores consistentes. No mundo real, é impossível alguém nascer no futuro, assim como alguém não pode comprar uma quantidade negativa de itens. O código abaixo seleciona as colunas que contêm datas e as colunas numéricas. Para as colunas com datas, é verificado a quantidade de valores no futuro e para as colunas numéricas e verificado a quantidade de valores negativos.
 </p>
+
 ```python
 from datetime import date
 
@@ -86,6 +87,7 @@ for col in num_cols:
     num_negative = len(churn_df[churn_df[col] < 0])
     print(f"Number of '{col}' rows out of range: {num_negative}")
 ```
+
 <p align="center">
   <img src= "images/out_of_range_data.png" />
 </p>
@@ -195,4 +197,4 @@ churn_df.loc[churn_df['deleted_at'].notnull(), 'recency_subscription'] = \
 
 # Exploratory Data Analysis
 
-#Conclusion
+# Conclusion
