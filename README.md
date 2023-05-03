@@ -409,10 +409,16 @@ Realizamos diversas outras análises, incluindo a avaliação das colunas 'versi
 
 <p align="justify">
 Os resultados da análise de dados indicaram que a probabilidade de cancelamento de assinatura é maior entre os clientes que ficam mais tempo sem efetuar compras pelo serviço de assinatura. Mais de 70% dos clientes que cancelaram a assinatura pertenciam a essa categoria. Ademais, observou-se que os clientes com menor tempo de assinatura também apresentam maior propensão ao cancelamento.
+</p>
 
+<p align="justify">
 Essa conclusão é relevante para a empresa, uma vez que sugere que a estratégia de retenção de clientes pode ser aprimorada, com foco nos clientes que ficam mais tempo sem realizar compras. Para manter esses clientes engajados e incentivá-los a continuar utilizando o serviço, a empresa pode desenvolver ações que ofereçam descontos, promoções especiais e outras vantagens.
+</p>
 
+<p align="justify">
 Além disso, os resultados sugerem que os clientes com menor tempo de assinatura precisam de atenção especial, uma vez que também apresentam maior probabilidade de cancelamento. Para aumentar a fidelidade desses clientes, a empresa pode investir em benefícios exclusivos e personalizados, melhorar a qualidade dos produtos ou serviços oferecidos e fornecer um atendimento ao cliente de excelência.
+</p>
 
+<p align="justify">
 Com base nesses resultados, a empresa pode implementar medidas eficazes para melhorar a retenção de clientes e garantindo a satisfação dos mesmos.
 </p>
