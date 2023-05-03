@@ -385,7 +385,7 @@ plt.show()
 ```
 
 <p align = "center">
-  <img src= "images/subscription_lengh_churn.png" />
+  <img src= "images/subscription_lengh_distribution.png" />
 </p>
 
 <p align="justify">
