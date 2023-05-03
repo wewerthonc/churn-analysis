@@ -1,6 +1,5 @@
 # Churn Analysis
 Repositório: https://github.com/wewerthonc/churn-analysis
-
 Original: https://colab.research.google.com/drive/1HMHLvDkqChgJUFPj-5Iw7-vpHcfca8ud.
 - Google colab notebook: **Churn.ipynb**
 - Dataset: data\data-test-analytics.csv
@@ -88,7 +87,6 @@ for col in num_cols:
     num_negative = len(churn_df[churn_df[col] < 0])
     print(f"Number of '{col}' rows out of range: {num_negative}")
 ```
-
 <p align="center">
   <img src= "images/out_of_range_data.png" />
 </p>
@@ -97,10 +95,7 @@ for col in num_cols:
 Por meio dos resultados, é possível perceber bastante valores incorretos para a coluna 'birth_date'. A quantidade representa mais de 50% dos valores contidos na tabela. Sendo assim, é importante excluir essa coluna do dataset, uma vez que não irá nos ajudar a tirar conclusões sobre o problema.
 </p>
 
-```python
-# Drop 'birth_date' column
-churn_df.drop('birth_date', axis = 1, inplace = True)
-```
+
 
 #### Duplicated Data
 
@@ -196,6 +191,227 @@ churn_df.loc[churn_df['deleted_at'].notnull(), 'recency_subscription'] = \
           (churn_df['deleted_at'] - churn_df['last_date_purchase']).dt.days
 ```
 
+<p align="justify">
+Realizamos as principais manipulações e verificações de consistência em nosso conjunto de dados, garantindo assim que ele esteja pronto para análises detalhadas que nos permitam tirar conclusões acerca dos motivos pelos quais os clientes estão cancelando suas assinaturas.
+</p>
+
 # Exploratory Data Analysis
 
-# Conclusion
+<p align="justify">
+Uma das primeiras análises de dados que se deve realizar é a descrição estatística dos dados númericos. Esse procedimento é fundamental, pois nos permite descrever os dados de maneira completa e direcionar a análise de forma coerente.
+</p>
+
+<p align="center">
+  <img src= "images/description_data.png" />
+</p>
+
+<p align="justify">
+Os valores apresentados na imagem, sugerem um dataset com valores dispersos igualmente, com exceção das colunas  'recency' e 'recency_subscription', onde o resultado sugere que pode haver valores discrepantes (outliers) em nosso conjunto de dados, pois apresentam valores máximos muito acima dos valores típicos de cada coluna. Outilers são valores que se afastam significativamente da média dos dados. É importante tratar os outliers porque eles podem afetar significativamente a análise de dados e levar a conclusões enviesadas.
+</p>
+
+<p align="justify">
+Para facilitar nossa análise, vamos criar uma nova coluna chamada 'churn' a partir da coluna 'deleted_at'. Essa coluna poderá ter dois valores: 'Yes' (Sim) caso o cliente tenha cancelado a assinatura e 'No' caso contrário. A criação dessa coluna vai simplificar a nossa visualização e permitir que possamos trabalhar com os dados de forma mais direta, sem precisar realizar muitas manipulações.
+</p>
+
+```python
+# Create a new column to address churned clients
+churn_df['churn'] = pd.isna(churn_df['deleted_at']).apply(lambda deleted: "Yes" if not deleted else "No")
+```
+
+<p align="justify">
+Com base nessa nova coluna, é possível calcular novas estatísticas descritivas para as colunas numéricas de cada categoria presente nessa coluna. Dessa forma, podemos identificar possíveis diferenças estatísticas entre as diferentes categorias.
+</p>
+
+```python
+churn_df.groupby('churn').mean(numeric_only = True)
+```
+
+<p align = "center">
+  <img src= "images/mean_churn.png" />
+</p>
+
+```python
+churn_df.groupby('churn').std(numeric_only = True)
+```
+
+<p align = "center">
+  <img src= "images/std_churn.png" />
+</p>
+
+<p align="justify">
+Analisando os resultados, podemos observar que os atributos que caracterizam os clientes que cancelaram a assinatura não apresentam uma grande variação em comparação com aqueles que permaneceram. Entretanto, nas colunas 'rencency' e 'recency_distribution', os resultados dos clientes que cancelaram a assinatura são bem maiores dos aqueles que não cancelaram. Isso pode sugerir que e o cliente ficou um longo período sem utilizar a assinatura antes de cancelar pois ele não viu vantagem em continuar pagando por algo que não está usando. Por outro lado, um cliente que mantém a assinatura ativa e não fica muito tempo sem comprar pode estar satisfeito o serviço oferecido e vê valor em continuar pagando pela assinatura. Vamos apenas considerar a coluna 'recency_distribution'
+</p>
+
+<p align="justify">
+Uma prática recomendada nesses casos é verificar se a quantidade de clientes que cancelaram aumenta à medida que os dias desde a última compra passam. Para realizar essa verificação, é possível criar uma categoria ('rencency_caregory') que divide a coluna 'recency_subscription' em grupos, levando em consideração a quantidade de dias que um cliente ficou sem realizar uma compra.
+</p>
+
+```python
+# Define quantiles and bins
+quantile_25th = churn_df['recency_subscription'].quantile(0.25)
+quantile_75th = churn_df['recency_subscription'].quantile(0.75)
+bins = [-1, quantile_25th, quantile_75th, churn_df['recency_subscription'].max()]
+
+# Define labels for each category
+labels = ['0-28 days', '29-37 days', '38+ days']
+
+# Create a new column with the recency category
+churn_df['recency_category'] = pd.cut(churn_df['recency_subscription'], bins=bins, labels=labels)
+```
+
+```python
+# Select only the churned clients
+churned_clients = churn_df[churn_df['churn'] == 'Yes']
+
+# Create a countplot with Seaborn
+sns.countplot(x='recency_category', data=churned_clients, color='#DE8F8F')
+
+# Set the title and x-axis label
+plt.title('Churned Clients by Recency Category')
+plt.xlabel('Recency Category')
+plt.ylabel('Count')
+
+# Add horizontal grid lines
+plt.grid(axis='y')
+
+# Show the plot
+plt.show()
+```
+
+<p align = "center">
+  <img src= "images/churned_clients_time_last_purchase.png" />
+</p>
+
+<p align="justify">
+Podemos concluir ao analisar o gráfico de barras que a maioria dos clientes que cancelaram a assinatura ficaram mais de 38 dias sem efetuar uma compra. Podemos verificar nossa hipótese comparando a distribuição percentual de cada categoria da variável 'recency_category' entre os clientes que cancelaram a assinatura e aqueles que não cancelaram.
+</p>
+
+```python
+# Filter the DataFrame to include only churned and non-churned clients
+churned_df = churn_df[churn_df['churn'] == 'Yes']
+not_churned_df = churn_df[churn_df['churn'] == 'No']
+
+# Group the data by recency_category and calculate the percentage of churned and non-churned clients in each group
+churned_pct = churned_df.groupby('recency_category')['churn'].count() / len(churned_df)
+not_churned_pct = not_churned_df.groupby('recency_category')['churn'].count() / len(not_churned_df)
+
+# Merge the percentages for churned and non-churned clients into a single DataFrame
+pct_df = pd.concat([churned_pct, not_churned_pct], axis=1).reset_index()
+pct_df.columns = ['recency_category', 'Churned pct', 'Not Churned pct']
+
+# Melt the DataFrame to create a "long" format for Seaborn's bar plot
+melted_df = pct_df.melt(id_vars='recency_category', var_name='churned', value_name='percent')
+
+
+# Create the bar plot
+plt.figure(figsize=(10, 6))
+ax = sns.barplot(x='recency_category', y='percent', hue='churned', data=melted_df)
+
+# Add horizontal grid lines
+plt.grid(axis='y')
+
+# Add percentage annotations to the bars
+for p in ax.containers:
+    for q in p.patches:
+        x = q.get_x() + q.get_width() / 2
+        y = q.get_height()
+        ax.annotate('{:.1%}'.format(y), (x, y), ha='center', va='bottom')
+
+# Set the x and y labels
+ax.set_xlabel('Recency Category')
+ax.set_ylabel('Percentage')
+
+# Set the title
+ax.set_title('Churn Rate by Recency Category')
+
+legend = ax.get_legend()
+legend.set_title("")
+
+# Show plot
+plt.show()
+```
+
+
+<p align = "center">
+  <img src= "images/recency_category.png" />
+</p>
+
+<p align="justify">
+Os resultados indicam que clientes que ficam mais tempo sem comprar pela assinatura têm mais chances de cancelar, já que mais de 70% dos clientes que cancelaram pertencem a essa categoria.
+</p>
+
+<p align="justify">
+O tempo de assinatura pode influenciar um cliente a cancelar a assinatura. Quanto mais tempo um cliente fica com uma assinatura, maior é a expectativa dele em relação ao serviço oferecido. Se o serviço não atende mais às expectativas do cliente, ele pode decidir cancelar a assinatura. Com os dados que temos no nosso dataset, é possível saber o tempo de assinatura de cada cliente e, portanto, definir uma coluna 'subscription_length'.
+</p>
+
+```python
+# Define a date and time.
+current_time = churn_df['last_date_purchase'].max()
+
+# Fill any missing values (if any) in the 'deleted_at' column with the defined time
+deleted_at = churn_df['deleted_at'].fillna(current_time)
+
+# Calculate the difference between the 'deleted_at' and 'created_at' columns to get the subscription duration 
+subscription_duration = deleted_at - churn_df['created_at']
+
+# Extract only the days from the subscription duration
+subscription_days = subscription_duration.dt.days
+
+# Create a new column 'subscription_length'
+churn_df['subscription_length'] = subscription_days
+```
+
+<p align="justify">
+O próximo passo é fazer uma visualização, para descobir a distribuição do tempo de assinatura comparado entre clientes que cancelaram e aqueles que não cancelaram. Um boxplot seria perfeito para essa situação.
+</p>
+
+```python
+# Create boxplot
+g = sns.boxplot(x = 'churn', y = 'subscription_length', sym = "", data = churn_df)
+
+# Add horizontal grid
+g.yaxis.grid(True)
+
+# Set labels and title
+g.set_xlabel('Client Status')
+g.set_ylabel('Subscription Length (days)')
+g.set_title("Subscription Length by Status", fontsize = 14)
+
+# Add descriptive note to x-axis
+g.set(xticklabels=["Canceled", "Active"])
+
+# Show plot
+plt.show()
+```
+
+<p align = "center">
+  <img src= "images/subscription_lengh_churn.png" />
+</p>
+
+<p align="justify">
+Parece haver uma relação entre o tempo de assinatura e o cancelamento por parte dos clientes. O boxplot sugere que, em geral, os clientes que possuem menor tempo de assinatura têm maior probabilidade de cancelá-la.
+</p>
+
+<p align="justify">
+Assim como fizemos anteriormente, para melhor visualização, vamos criar uma coluna 'subscription_category', comparando a distribuição percentual de cada categoria dessa coluna entre os clientes que cancelaram a assinatura e aqueles que não cancelaram.
+</p>
+
+<p align = "center">
+  <img src= "images/subscription_category.png" />
+</p>
+
+<p align="justify">
+Realizamos diversas outras análises, incluindo a avaliação das colunas 'version', 'state', 'city', 'marketing_source' e 'created_at', com o objetivo de comparar a distribuição dos clientes que cancelaram as assinaturas com aqueles que não cancelaram. No entanto, essas análises não forneceram novos insights relevantes, e os resultados podem ser encontrados no notebook.
+</p>
+
+#Conclusion
+
+<p align="justify">
+Os resultados da análise de dados indicaram que a probabilidade de cancelamento de assinatura é maior entre os clientes que ficam mais tempo sem efetuar compras pelo serviço de assinatura. Mais de 70% dos clientes que cancelaram a assinatura pertenciam a essa categoria. Ademais, observou-se que os clientes com menor tempo de assinatura também apresentam maior propensão ao cancelamento.
+
+Essa conclusão é relevante para a empresa, uma vez que sugere que a estratégia de retenção de clientes pode ser aprimorada, com foco nos clientes que ficam mais tempo sem realizar compras. Para manter esses clientes engajados e incentivá-los a continuar utilizando o serviço, a empresa pode desenvolver ações que ofereçam descontos, promoções especiais e outras vantagens.
+
+Além disso, os resultados sugerem que os clientes com menor tempo de assinatura precisam de atenção especial, uma vez que também apresentam maior probabilidade de cancelamento. Para aumentar a fidelidade desses clientes, a empresa pode investir em benefícios exclusivos e personalizados, melhorar a qualidade dos produtos ou serviços oferecidos e fornecer um atendimento ao cliente de excelência.
+
+Com base nesses resultados, a empresa pode implementar medidas eficazes para melhorar a retenção de clientes e garantindo a satisfação dos mesmos.
+</p>
