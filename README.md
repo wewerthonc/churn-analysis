@@ -240,11 +240,11 @@ churn_df.groupby('churn').std(numeric_only = True)
 </p>
 
 <p align="justify">
-Analisando os resultados, podemos observar que os atributos que caracterizam os clientes que cancelaram a assinatura não apresentam uma grande variação em comparação com aqueles que permaneceram. Entretanto, nas colunas 'rencency' e 'recency_distribution', os resultados dos clientes que cancelaram a assinatura são bem maiores dos aqueles que não cancelaram. Isso pode sugerir que e o cliente ficou um longo período sem utilizar a assinatura antes de cancelar pois ele não viu vantagem em continuar pagando por algo que não está usando. Por outro lado, um cliente que mantém a assinatura ativa e não fica muito tempo sem comprar pode estar satisfeito o serviço oferecido e vê valor em continuar pagando pela assinatura. Vamos apenas considerar a coluna 'recency_distribution'
+Analisando os resultados, podemos observar que os atributos que caracterizam os clientes que cancelaram a assinatura não apresentam uma grande variação em comparação com aqueles que permaneceram. Entretanto, nas colunas 'rencency' e 'recency_subscription', os resultados dos clientes que cancelaram a assinatura são bem maiores dos aqueles que não cancelaram. Isso pode sugerir que e o cliente ficou um longo período sem utilizar a assinatura antes de cancelar pois ele não viu vantagem em continuar pagando por algo que não está usando. Por outro lado, um cliente que mantém a assinatura ativa e não fica muito tempo sem comprar pode estar satisfeito o serviço oferecido e vê valor em continuar pagando pela assinatura. Vamos apenas considerar a coluna 'recency_subscription'
 </p>
 
 <p align="justify">
-Uma prática recomendada nesses casos é verificar se a quantidade de clientes que cancelaram aumenta à medida que os dias desde a última compra passam. Para realizar essa verificação, é possível criar uma categoria ('rencency_caregory') que divide a coluna 'recency_subscription' em grupos, levando em consideração a quantidade de dias que um cliente ficou sem realizar uma compra.
+Uma prática recomendada nesses casos é verificar se a quantidade de clientes que cancelaram aumenta à medida que os dias desde a última compra passam. Para realizar essa verificação, é possível criar uma coluna 'rencency_caregory' que divide a coluna 'recency_subscription' em grupos, levando em consideração a quantidade de dias que um cliente ficou sem realizar uma compra.
 </p>
 
 ```python
@@ -284,7 +284,7 @@ plt.show()
 </p>
 
 <p align="justify">
-Podemos concluir ao analisar o gráfico de barras que a maioria dos clientes que cancelaram a assinatura ficaram mais de 38 dias sem efetuar uma compra. Podemos verificar nossa hipótese comparando a distribuição percentual de cada categoria da variável 'recency_category' entre os clientes que cancelaram a assinatura e aqueles que não cancelaram.
+Podemos concluir ao analisar o gráfico de barras que a maioria dos clientes que cancelaram a assinatura ficaram mais de 38 dias sem efetuar uma compra. Outra forma de comprovar a nossa hipótese, seria comparando a distribuição percentual de cada categoria da variável 'recency_category' entre os clientes que cancelaram a assinatura e aqueles que não cancelaram.
 </p>
 
 ```python
@@ -302,7 +302,6 @@ pct_df.columns = ['recency_category', 'Churned pct', 'Not Churned pct']
 
 # Melt the DataFrame to create a "long" format for Seaborn's bar plot
 melted_df = pct_df.melt(id_vars='recency_category', var_name='churned', value_name='percent')
-
 
 # Create the bar plot
 plt.figure(figsize=(10, 6))
