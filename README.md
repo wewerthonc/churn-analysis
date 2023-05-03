@@ -397,7 +397,7 @@ Assim como fizemos anteriormente, para melhor visualização, vamos criar uma co
 </p>
 
 <p align = "center">
-  <img src= "images/subscription_category.png" />
+  <img src= "images/subscription_lengh_distribution.png" />
 </p>
 
 <p align="justify">
