@@ -404,7 +404,7 @@ Assim como fizemos anteriormente, para melhor visualização, vamos criar uma co
 Realizamos diversas outras análises, incluindo a avaliação das colunas 'version', 'state', 'city', 'marketing_source' e 'created_at', com o objetivo de comparar a distribuição dos clientes que cancelaram as assinaturas com aqueles que não cancelaram. No entanto, essas análises não forneceram novos insights relevantes, e os resultados podem ser encontrados no notebook.
 </p>
 
-#Conclusion
+# Conclusion
 
 <p align="justify">
 Os resultados da análise de dados indicaram que a probabilidade de cancelamento de assinatura é maior entre os clientes que ficam mais tempo sem efetuar compras pelo serviço de assinatura. Mais de 70% dos clientes que cancelaram a assinatura pertenciam a essa categoria. Ademais, observou-se que os clientes com menor tempo de assinatura também apresentam maior propensão ao cancelamento.
