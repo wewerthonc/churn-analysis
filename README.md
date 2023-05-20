@@ -2,7 +2,7 @@
 Repositório: https://github.com/wewerthonc/churn-analysis
 
 Original: https://colab.research.google.com/drive/1HMHLvDkqChgJUFPj-5Iw7-vpHcfca8ud.
-- Google colab notebook: **Churn_data_analysis.ipynb*
+- Google colab notebook: **Churn_data_analysis.ipynb**
 - Dataset: data\data-test-analytics.csv
 
 
