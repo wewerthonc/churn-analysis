@@ -2,17 +2,27 @@
 Repositório: https://github.com/wewerthonc/churn-analysis
 
 Original: https://colab.research.google.com/drive/1HMHLvDkqChgJUFPj-5Iw7-vpHcfca8ud.
-- Google colab notebook: **Churn.ipynb**
+- Google colab notebook: **Churn_data_analysis.ipynb.ipynb**
 - Dataset: data\data-test-analytics.csv
 
+
+<p align="justify">
 Neste notebook, montamos o Google Drive, importamos pacotes necessários como matplotlib, seaborn, numpy e pandas, e lemos um arquivo CSV chamado "data-test-analytics.csv", que contém dados de churn de clientes.
+</p>
 
 # 1. Introduction
 
+<p align="justify">
 Estou participando de um desafio para uma vaga de estágio. A empresa em questão, especializada em serviços de assinaturas, está enfrentando um problema de aumento no índice de "Churn", ou seja, clientes que assinam o serviço e o cancelam em algum momento posterior. A equipe de assinaturas tem como objetivo reduzir essa perda de assinantes, porém, mesmo com melhorias na plataforma, o churn vem aumentando nos últimos meses. Nesse contexto, será realizada uma análise de dados com o objetivo de identificar os fatores que levam à perda de assinantes e propor soluções o problema.
+</p>
+
 
 # 2. Data Description
-Como dito previamente, o dataset contém informações de assinaturas de clientes dessa empresa. Cada linha do dataset representa um cliente e este possui 10000 linhas. Cada coluna significa uma característica do cliente, sendo as seguintes colunas:
+
+<p align="justify">
+Como dito previamente, o dataset contém informações de assinaturas de clientes. Cada linha do dataset representa um cliente e este possui 10000 linhas. Cada coluna significa uma característica do cliente, sendo as seguintes colunas:
+</p>
+
 - id: Identificação do cliente
 - created_at: Data de criação da assinatura
 - updated_at: Data da última modificação da assinatura
@@ -115,7 +125,7 @@ churn_df.drop_duplicates('id', inplace = True)
 #### Inconsistent Data
 
 <p align="justify">
-Pode haver diversas inconsistências nos nossos dados. Muitas vezes, os dados podem estar corrompidos, incompletos ou imprecisos. Essas inconsistências podem afetar a qualidade da análise e gerar resultados errados ou distorcidos. No nosso dataset, podemos observar que temos várias colunas representado datas. Com base nessas datas, podemos chegar a seguinte afirmação: um dado da coluna 'created_at' não deve ser maior que um dado da coluna 'updated_at', assim como não deve ser maior que um dado da coluna 'deleted_at'. Um cliente não pode ser criado depois de deletado ou atualizado. Da mesma forma, um dado da coluna 'last_date_purchase' não pode estar no futuro, ou ter acontecido depois do cliente ter sido deletado.
+Pode haver diversas inconsistências nos nossos dados. Muitas vezes, os dados podem estar corrompidos, incompletos ou imprecisos. Essas inconsistências podem afetar a qualidade da análise e gerar resultados errados ou distorcidos. No nosso dataset, podemos observar que temos várias colunas representado datas. Com base nessas datas, podemos chegar a seguinte afirmação: um dado da coluna 'created_at' não deve ser maior que um dado da coluna 'updated_at', assim como não deve ser maior que um dado da coluna 'deleted_at'. Um cliente não pode ser criado depois de deletado ou atualizado. Da mesma forma, um dado da coluna 'last_date_purchase' não pode estar no futuro, ter acontecido antes do cliente ser sido criado ou depois do cliente ter sido deletado.
 </p>
 
 ```python
@@ -177,7 +187,7 @@ if result:
 ```
 
 <p align="justify">
-A coluna 'recency' possui valores que representam o tempo desde a última compra do cliente. O que aconteceria se esses valores continuassem sendo alterados mesmo depois do cliente ter cancelado a assinatura ?! Caso comparássemos esses valores com clientes ativos, poderíamos chegar a falsas conclusões, tal como alegar que um cliente que fica muito tempo sem comprar com a assinatura, tem tendência a cancela-la. Dessa forma, vamos criar uma nova coluna 'recency_subscription', que significa a quantidade de dias que um cliente está sem fazer uma compra, levando em consideração somente o tempo de assinatura. A data da compra mais nova no dataset será usada como referência para fazer os cálculos para clientes ativos.
+A coluna 'recency' possui valores que representam o tempo desde a última compra do cliente. O que aconteceria se esses valores continuassem sendo alterados mesmo depois do cliente ter cancelado a assinatura? Caso comparássemos esses valores com clientes ativos, poderíamos chegar a falsas conclusões. Dessa forma, vamos criar uma nova coluna 'recency_subscription', que significa a quantidade de dias que um cliente está sem fazer uma compra, levando em consideração somente o tempo de assinatura. A data da compra mais nova no dataset será usada como referência para fazer os cálculos para clientes ativos.
 </p>
 
 ```python
@@ -245,7 +255,7 @@ plt.show()
 </p>
 
 <p align="justify">
-Como podemos visualizar, há um número bem menor de clientes que cancelaram a assinatura. Dessa forma, a representatividade dos clientes pod ser considerada limitada, pois há poucas amostras, podendo trazer um viés para a nossa análise. Uma das primeiras análises de dados que se deve realizar é a descrição estatística dos dados númericos. Esse procedimento é fundamental porque nos permite descrever os dados de maneira completa e direcionar a análise de forma coerente.
+Como podemos visualizar, há um número bem menor de clientes que cancelaram a assinatura. Sendo assim, a representatividade dos clientes pode ser considerada limitada, pois há poucas amostras, podendo trazer um viés para a nossa análise. Uma das primeiras análises de dados que se deve realizar é a descrição estatística dos dados númericos. Esse procedimento é fundamental porque nos permite descrever os dados de maneira completa e direcionar a análise de forma coerente.
 </p>
 
 <p align="center">
@@ -399,15 +409,17 @@ plot_churn_rate_by_category(churn_df, 'recency_subscription', 'recency_category'
 </p>
 
 <p align="justify">
-Podemos concluir ao analisar o gráfico de barras que a maioria dos clientes que cancelaram a assinatura ficaram mais de 46 dias sem efetuar uma compra, sendo quase 60% desses clientes ficaram 85 dias sem utilizar a assinatura, e não há nenhum cliente ativo que com 85 ou mais dias sem comprar pela assinatura.
+Podemos concluir ao analisar o gráfico de barras que a maioria dos clientes que cancelaram a assinatura ficaram mais de 46 dias sem efetuar uma compra, sendo que quase 60% desses clientes ficaram 85 dias sem utilizar a assinatura, e não há nenhum cliente ativo com 85 ou mais dias sem comprar pela assinatura.
 </p>
 
 <p align="justify">
-O tempo de assinatura pode influenciar um cliente a cancelar a assinatura. Se  não atende mais às expectativas do cliente, ele pode decidir cancelar a assinatura. Com os dados que temos no nosso dataset, é possível saber o tempo de assinatura de cada cliente e, portanto, definir uma coluna 'subscription_duration'.
+O tempo de assinatura pode influenciar um cliente a cancelar a assinatura. Se  não atende mais às expectativas do cliente, ele pode decidir cancelar Com os dados que temos no nosso dataset, é possível saber o tempo de assinatura de cada cliente e, portanto, definir uma coluna 'subscription_duration'.
 </p>
 
 ```python
 # Define a date and time.
+current_time = churn_df['last_date_purchase'].max()
+
 # Fill any missing values (if any) in the 'deleted_at' column with the defined time
 deleted_at = churn_df['deleted_at'].fillna(current_time)
 
@@ -492,6 +504,22 @@ def get_season(date):
 churned_seasons = pd.DataFrame(churned_customers.apply(get_season))
 ```
 
+```python
+# Create a countplot with Seaborn
+sns.countplot(x = 'deleted_at', data=churned_seasons, color='#DE8F8F')
+
+# Set the title and x-axis label
+plt.title('Churned Clients by Season')
+plt.xlabel('Seaons')
+plt.ylabel('Count')
+
+# Add horizontal grid lines
+plt.grid(axis='y')
+
+# Show the plot
+plt.show()
+```
+
 <p align = "center">
   <img src= "images/seasons_distribution.png" />
 </p>
@@ -504,11 +532,11 @@ Embora possamos observar um aumento no número de cancelamentos durante o verão
 # apply the get_season function to each element of the non-churned_customers Series
 deleted_weekday = pd.DataFrame(churn_df['deleted_at'].dt.month_name())
 
+# Define the order of the months
+months_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                'August', 'September', 'October', 'November', 'December']
 # Create a countplot with Seaborn
-sns.countplot(x = 'deleted_at', data = deleted_weekday, color='#DE8F8F', order = ['January', 'February', 'March', 
-                                                                                  'April', 'May', 'June', 'July', 
-                                                                                  'August', 'September', 'October', 
-                                                                                  'November', 'December'])
+sns.countplot(x = 'deleted_at', data = deleted_weekday, color='#DE8F8F', order = months_order)
 
 # Set the title and x-axis label
 plt.xticks(rotation = 90)
@@ -528,26 +556,25 @@ plt.show()
 </p>
 
 <p align="justify">
-Com base nessa nova visualização, com base somente nos clientes que cancelaram em nosso dataset, podemos levantar a hipótese de que a probabilidade dos clientes cancelarem aumenta ao longo do ano, sendo que há um pico em Dezembro, Janeiro e Fevereiro, e uma queda considerável em março.
+Com base nessa nova visualização, podemos levantar a hipótese de que a probabilidade dos clientes cancelarem aumenta ao longo do ano, sendo que há um pico em Dezembro, Janeiro e Fevereiro, e uma queda considerável em março.
 </p>
 
-
 <p align="justify">
-Realizamos diversas outras análises, incluindo a avaliação das colunas 'version', 'state', 'city', 'marketing_source' e 'created_at', com o objetivo de comparar a distribuição dos clientes que cancelaram as assinaturas com aqueles que não cancelaram. No entanto, essas análises não forneceram novos insights relevantes, e os resultados podem ser encontrados no notebook.
+Realizamos diversas outras análises, incluindo a avaliação das colunas 'version', 'state', 'city', 'marketing_source' e 'created_at', com o objetivo de comparar a distribuição dos clientes que cancelaram as assinaturas com aqueles que não cancelaram. No entanto, essas análises não forneceram novos insights relevantes e os resultados podem ser encontrados no notebook.
 </p>
 
 # Conclusion
 
 <p align="justify">
-Os resultados da análise de dados indicaram que a probabilidade de cancelamento de assinatura é maior entre os clientes que ficam mais tempo sem efetuar compras pelo serviço de assinatura. Os dados mostram que nenhum cliente ativo fica mais de 85 dias sem comprar pela assinatura, e mais quase 60% dos clientes que cancelaram, pertencem a essa categoria.
+Os resultados da análise de dados indicaram que a probabilidade de cancelamento da assinatura é maior entre os clientes que ficam mais tempo sem efetuar compras pelo serviço de assinatura. Os dados mostram que nenhum cliente ativo fica mais de 85 dias sem comprar pela assinatura e, quase 60% dos clientes que cancelaram, pertencem a essa categoria.
 </p>
 
 <p align="justify">
-Essa conclusão é relevante para a empresa, uma vez que sugere que a estratégia de retenção de clientes pode ser aprimorada, com foco nos clientes que ficam mais tempo sem realizar compras. Para manter esses clientes engajados e incentivá-los a continuar utilizando o serviço, a empresa pode desenvolver ações que ofereçam descontos, promoções especiais e outras vantagens.
+Essa conclusão é pode ser relevante para a empresa, uma vez que sugere que a estratégia de retenção de clientes pode ser aprimorada, com foco nos clientes que ficam mais tempo sem realizar compras. Com o objetivo de manter esses clientes engajados e incentivá-los a continuar utilizando o serviço, a empresa pode desenvolver ações que ofereçam descontos, promoções especiais e outras vantagens.
 </p>
 
 <p align="justify">
-Além disso, os resultados sugerem que os clientes com menor tempo de assinatura precisam de atenção especial, uma vez que também apresentam maior probabilidade de cancelamento. Para aumentar a fidelidade desses clientes, a empresa pode investir em benefícios exclusivos e personalizados, melhorar a qualidade dos produtos ou serviços oferecidos e fornecer um atendimento ao cliente de excelência.
+Além disso, os resultados sugerem que os clientes com menor tempo de assinatura precisam de atenção especial, uma vez que também apresentam maior probabilidade de cancelamento. Para aumentar a fidelidade desses clientes, a empresa pode investir em benefícios exclusivos e personalizados, melhorar a qualidade dos produtos ou serviços oferecidos.
 </p>
 
 <p align="justify">
@@ -555,5 +582,5 @@ No mais, os dados sugerem que os clientes tem maior probabilidade de cancelar no
 </p>
 
 <p align="justify">
-Com base nesses resultados, a empresa pode implementar medidas eficazes para melhorar a retenção de clientes e garantindo a satisfação dos mesmos.
+Portanto, com base nos dados levantados, a empresa pode implementar medidas eficazes para melhorar a retenção de clientes e garantindo a satisfação dos mesmos.
 </p>
